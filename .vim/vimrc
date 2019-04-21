@@ -1,0 +1,227 @@
+
+
+
+
+" ==================================================================
+"                           PLUGINS
+" ==================================================================
+" FOR VUNDLE
+set nocompatible              " be improved, required
+filetype off                  " required
+
+"set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" -------------------------------------------
+"                Outside Behavior (file/term)
+" -------------------------------------------
+
+
+" Start splash screen
+Plugin 'mhinz/vim-startify'
+ 
+Plugin 'scrooloose/nerdtree'
+
+" Autocomplete!
+" Plugin 'Valloric/YouCompleteMe'
+
+" for linter
+"Plugin 'scrooloose/syntastic'
+
+" -------------------------------------------
+"                           Vim extensibility
+" -------------------------------------------
+
+" for brackets
+Plugin 'Raimondi/delimitMate'
+
+" Minimap
+Plugin 'severin-lemaignan/vim-minimap'
+
+" Tagbar
+Plugin 'majutsushi/tagbar'
+
+" for fuzzy finding in files (grep-ish?)
+Plugin 'ctrlpvim/ctrlp.vim'
+
+" Git gutter for git diffs
+Plugin 'airblade/vim-gitgutter'
+
+" for tern?
+" Plugin 'ternjs/tern_for_vim'
+"
+" For html
+Plugin 'alvan/vim-closetag'
+" -------------------------------------------
+"                             Enhanced Leader
+" -------------------------------------------
+"
+Plugin 'scrooloose/nerdcommenter'
+
+
+" -------------------------------------------
+"                             tpope is a god
+" -------------------------------------------
+
+" tpope/abolish (Abolish, Subvert, Coerce)
+Plugin 'tpope/vim-abolish'
+
+" tpop/surround
+Plugin 'tpope/vim-surround'
+
+" -------------------------------------------
+"                                       Color
+" -------------------------------------------
+Plugin 'whatyouhide/vim-gotham'
+
+Plugin 'flazz/vim-colorschemes'
+"Plugin 'altercation/vim-colors-solarized'
+
+" -------------------------------------------
+"                                  Statusline
+" -------------------------------------------
+
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+" -------------------------------------------
+"                                Lang Plugins
+" -------------------------------------------
+Plugin 'rust-lang/rust.vim'
+Plugin 'guns/vim-clojure-static'
+Plugin 'fatih/vim-go'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+
+" ===============================================================================
+"                                   INDENTATION
+" ===============================================================================
+
+filetype plugin indent on
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+
+" ===============================================================================
+"                                   LOOKS
+" ===============================================================================
+
+"Change the colorscheme to something better
+syntax enable
+set background=dark
+colorscheme monokai
+
+"Show line numbers
+set number
+
+" ===============================================================================
+"                                   KEYMAPPINGS
+" ===============================================================================
+
+"Set jj to go to Normal Mode in Insert Mode
+:imap jj <Esc>
+
+" remap the leader to comma, easier than \
+let mapleader= ","
+
+" makie moving around in windows easier
+map <leader>h :wincmd h<CR>
+map <leader>j :wincmd j<CR>
+map <leader>k :wincmd k<CR>
+map <leader>l :wincmd l<CR>
+
+" make resizing windows eaiser
+map - <C-W>-
+map + <C-W>+
+map <leader>e :NERDTreeToggle<CR>
+map <leader>n :noh<CR>
+" :inoremap ( ()<Esc>i
+
+nmap <leader>tt :TagbarToggle<CR>
+nmap <leader>ta :tabNext<CR>
+
+" Make highlighting fuzzy
+set hls is ic scs
+
+
+" ===============================================================================
+"                               PLUGIN CUSTOMIZATION
+" ===============================================================================
+
+let g:NERDCustomDelimiters = { 'js' : { 'left': '// ', 'leftAlt': '', 'rightAlt': '' }}
+
+" Apparently syntastic recommends these...
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_javascript_checkers = [eslint]
+"Other syntastic
+"let g :syntastic_javascript_eslint_exec = "~/Documents/identity-lens/node_modules/eslint/bin"
+" ===============================================================================
+"                                  EX FUNCTIONS
+" ===============================================================================
+
+" :Shell now pastes result in temp buffer
+command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+function! s:RunShellCommand(cmdline)
+  echo a:cmdline
+  let expanded_cmdline = a:cmdline
+  for part in split(a:cmdline, ' ')
+     if part[0] =~ '\v[%#<]'
+        let expanded_part = fnameescape(expand(part))
+        let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
+     endif
+  endfor
+  botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  call setline(1, 'You entered:    ' . a:cmdline)
+  call setline(2, 'Expanded Form:  ' .expanded_cmdline)
+  call setline(3,substitute(getline(2),'.','=','g'))
+  execute '$read !'. expanded_cmdline
+  setlocal nomodifiable
+  1
+endfunction
+
+" :Git now outputs result in temp buffer
+command! -complete=file -nargs=* Git call s:RunShellCommand('git '.<q-args>)
+
+
+" ===============================================================================
+"                               STARTUP/EXIT/OTHER
+" ===============================================================================
+
+" from vundle wiki
+autocmd! BufWinLeave,BufWritePost,BufLeave,WinLeave ?* if !empty(glob(expand('%:p'))) | mkview | endif
+autocmd! BufWinEnter ?* if !empty(glob(expand('%:p'))) | silent loadview | endif
+
+
+"autocmd VimLeave * :!open -a iTerm2
+set guioptions-=rL
+" Leave when nerdtree is last window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+
+
+set statusline=%F\ %m%r%h%w\ [%l,%v]\ [%L]\ (%p%%)
+
+
+"set foldmethod=indent
+"set foldlevel=1000000
+"set foldclose=all
+
+let delimitMate_expand_cr=2
+
+
