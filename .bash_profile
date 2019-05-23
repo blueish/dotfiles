@@ -1,9 +1,11 @@
-
-export VISUAL=vim
-export EDITOR="$VISUAL"
+export ALTERNATE_EDITOR=""
+export EDITOR="emacsclient -t"
+export EDITOR="emacsclient -c -a emacs"
+#export VISUAL=vim
+#export EDITOR="$VISUAL"
+alias emacs="emacsclient -c"
 
 set -o vi
-source <(kubectl completion bash)
 export PATH=$PATH:/usr/local/go/bin
 
 eval $(thefuck --alias)
