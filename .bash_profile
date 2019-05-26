@@ -6,6 +6,8 @@ export EDITOR="emacsclient -c -a emacs"
 alias emacs="emacsclient -c"
 
 set -o vi
-export PATH=$PATH:/usr/local/go/bin
 
 eval $(thefuck --alias)
+
+export PATH=$PATH:/usr/local/go/bin
+export PATH="$HOME/.cargo/bin:$PATH"

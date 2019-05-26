@@ -143,7 +143,7 @@ values."
                                :size 13
                                :weight normal
                                :width normal
-                               :powerline-scale 0.6)
+                               :powerline-scale 1.0)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
